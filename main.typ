@@ -1,5 +1,7 @@
 #import "@preview/abbr:0.3.0"
 #import "macros.typ"
+#import "@preview/hydra:0.6.2": hydra
+
 // latex style
 #set par(leading: 0.6em, spacing: 1.1em, first-line-indent: 0em, justify: true)
 #set text(font: "New Computer Modern", lang: "de")
@@ -22,15 +24,23 @@
 #show: abbr.show-rule
 
 #macros.titlePage(
-  fachbereich: "Distributed Systems Group",
-  titel: "Eine Bachelorarbeit",
+  fachbereich: "Elektrotechnik/Informatik",
+  fachgebiet: "Verteilte Systeme",
+  arbeitstyp: "MASTERARBEIT",
+  titel: "Untersuchung der allgemeinen Anwendbarkeit von Fluxkondensatoren",
+  untertitel: "Zur Gewinnung von Einblicken",
   name: "Max Mustermann",
   matikelnummer: "1234567",
-  email: "max-mustermann@student.uni-kassel.de",
-  erstprüfer: "Prof. Charles",
-  zweitprüfer: "Prof. Bob",
-  betreuer: "Alice",
+  email: "max.mustermann@student.uni-kassel.de",
+  erstprüfer: "Prof. Dr. Oliver Hohlfeld",
+  zweitprüfer: "Prof. Dr. Emmett Brown",
+  betreuer: "Christian Coupé, M.Sc.",
 )
+
+#set page(header: context {
+  align(left, emph(hydra(1, skip-starting: false)))
+  line(length: 100%)
+})
 
 // Abkürzungen
 #abbr.make(
@@ -53,7 +63,7 @@
 
 = Typst
 
-Typst @noauthor_typst_2025 ist eine moderne Alternative zu LaTeX.
+Typst @noauthor_typst_2025 ist eine moderne Alternative zu LaTeX. 
 
 Schreibt sich wie Markdown, mit live Preview, und Scripting im Text.
 

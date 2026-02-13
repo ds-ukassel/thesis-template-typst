@@ -1,10 +1,14 @@
 #import "@preview/zebraw:0.6.1": *
+#import "@preview/ez-today:2.1.0"
 #show: zebraw
 
 // creates the titlepage
 #let titlePage(
   fachbereich: none,
+  fachgebiet: none,
+  arbeitstyp: none,
   titel: none,
+  untertitel: none,
   name: none,
   matikelnummer: none,
   email: none,
@@ -13,37 +17,52 @@
   betreuer: none,
 ) = {
   page(
-    footer: text(align(center)[#datetime.today().display("[day]. [month repr:long] [year]")], lang: "de`"),
-    header: none,
+    footer-descent: 0%,
+    footer: align(center)[
+      #ez-today.today()
+    ],
     // margin: 2em,
     paper: "a4",
   )[
+    #grid(
+      columns: (1fr, 1fr),
+      align: horizon,
+      grid(
+        image("assets/uk-logo.pdf", width: 6.8cm),
+      ),
+      (align(right)[Fachbereich #fachbereich \ Fachgebiet #fachgebiet])
+    )
     #align(center)[
       #grid(
         gutter: 1fr,
         grid(
           row-gutter: 2em,
-          image("assets/uk-logo.pdf", height: 1.5cm),
-          text(size: 1.6em)[Universität Kassel],
-          text(size: 1.4em)[#fachbereich],
         ),
         grid(
           row-gutter: 1em,
-          text(size: 1.4em)[#smallcaps()[Bachelor Arbeit]],
-          v(2em),
-          title(titel),
-          v(2em),
-          text(size: 1.4em)[_#name _],
-          v(0.2em),
-          [Mat.-Nr.: #matikelnummer],
-          email,
+          text(size: 1.3em)[#arbeitstyp],
+          v(.5em),
+          text(size: 1.85em, weight: "bold")[Untersuchung der allgemeinen \ Anwendbarkeit von Fluxkondensatoren],
+          v(.5em),
+          text(size: 1.5em)[#untertitel],
+          v(5em),
+          text(size: 1.2em, style: "italic")[#name],
+          v(0em),
+          text(size: 1em)[Mat.-Nr.: #matikelnummer],
+          text(size: 1em)[#email],
         ),
         grid(
-          row-gutter: 0.6em,
-          "betreut von",
+          row-gutter:1em,
+          "Prüfer:",
           erstprüfer,
           zweitprüfer,
+          v(.5em),
+          "Betreuer:",
           betreuer,
+          v(2em)
+        ),
+        grid(
+          row-gutter: 2em,
         ),
       )
     ]
