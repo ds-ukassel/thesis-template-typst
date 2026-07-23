@@ -30,7 +30,7 @@
   titel: "Untersuchung der allgemeinen Anwendbarkeit von Fluxkondensatoren",
   untertitel: "Zur Gewinnung von Einblicken",
   name: "Max Mustermann",
-  matikelnummer: "1234567",
+  matrikelnummer: "1234567",
   email: "max.mustermann@student.uni-kassel.de",
   erstprüfer: "Prof. Dr. Oliver Hohlfeld",
   zweitprüfer: "Prof. Dr. Emmett Brown",
