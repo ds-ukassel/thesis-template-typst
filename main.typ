@@ -5,7 +5,7 @@
 // Latex style
 #set par(leading: 0.6em, spacing: 1.1em, first-line-indent: 0em, justify: true)
 #set text(font: "New Computer Modern", lang: "de")
-#show raw: set text(font: "FiraMono Nerd Font")
+#show raw: set text(font: ("FiraMono Nerd Font", "Liberation Mono", "Courier New"))
 #show heading: set block(above: 1.4em, below: 1em)
 #set math.equation(numbering: "1.")
 
