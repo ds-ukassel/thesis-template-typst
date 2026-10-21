@@ -10,8 +10,8 @@
 #set math.equation(numbering: "1.")
 
 // Überschriften von Figuren und Bildbreite einstellen
-#set figure.caption(position: top)
-#show figure.caption: set text(size: 1.1em)
+#set figure.caption(position: bottom)
+#show figure.caption: set text(size: 10pt, weight: "bold")
 #show figure.where(kind: image): set block(width: 80%)
 
 // Einstellungen
