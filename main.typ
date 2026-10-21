@@ -46,6 +46,14 @@
   }
 })
 
+#set page(
+  margin: if double-sided {
+    (inside: 3cm, outside: 2cm)
+  } else {
+    (x: 2.5cm, y: 2.5cm)
+  }
+)
+
 #let newpage() = {
   if double-sided {
     pagebreak(to: "odd", weak: true)
