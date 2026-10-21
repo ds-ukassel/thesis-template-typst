@@ -75,6 +75,10 @@
 #abbr.list(title: "Abkürzungsverzeichnis")
 
 // Inhaltsverzeichnis
+#show outline.entry: set outline.entry(fill: repeat([.], gap: 0.3em))
+#show outline.entry.where(level: 1): set outline.entry(fill: none)
+#show outline.entry.where(level: 1): set text(weight: "bold")
+#show outline.entry.where(level: 1): set block(above: 1em)
 #newpage()
 #outline(depth: 3)
 
@@ -156,6 +160,12 @@ $ <formel1>
 ]
 
 // Verzeichnisse
+#show outline.entry: e => link(
+  e.element.location(),
+  e.indented([*#e.prefix()*:], e.inner()),
+)
+#show outline.entry.where(level: 1): set text(weight: "regular")
+
 = Abbildungsverzeichnis
 #outline(title: none, target: figure.where(kind: image))
 
