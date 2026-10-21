@@ -69,11 +69,11 @@
   ]
 }
 
-// creates a codeblock
+// Code Block
 #let codeBlock(code, caption: none, subtext: none) = {
   figure(
     [
-      #zebraw(numbering-separator: true, code)
+      #zebraw(numbering-separator: true, code, lang: false)
       #if subtext != none {
         block(
           subtext,
