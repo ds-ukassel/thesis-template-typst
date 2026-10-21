@@ -24,21 +24,6 @@
   numbering: none,
 )
 
-#set page(header: context {
-  if show-chapter-on-page-top {
-    align(left, emph(hydra(1, skip-starting: false)))
-    line(length: 100%)
-  }
-})
-
-#let newpage() = {
-  if double-sided {
-    pagebreak(to: "odd", weak: true)
-  } else {
-    pagebreak()
-  }
-}
-
 // Titelseite
 #macros.titlePage(
   fachbereich: "Elektrotechnik/Informatik",
@@ -53,6 +38,21 @@
   zweitprüfer: "Prof. Dr. Emmett Brown",
   betreuer: "Christian Coupé, M.Sc.",
 )
+
+#set page(header: context {
+  if show-chapter-on-page-top {
+    align(left, emph(hydra(1, skip-starting: false)))
+    line(length: 100%)
+  }
+})
+
+#let newpage() = {
+  if double-sided {
+    pagebreak(to: "odd", weak: true)
+  } else {
+    pagebreak()
+  }
+}
 
 
 // Abkürzungen
