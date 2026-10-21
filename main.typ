@@ -2,7 +2,7 @@
 #import "macros.typ"
 #import "@preview/hydra:0.6.2": hydra
 
-// latex style
+// Latex style
 #set par(leading: 0.6em, spacing: 1.1em, first-line-indent: 0em, justify: true)
 #set text(font: "New Computer Modern", lang: "de")
 #show raw: set text(font: "FiraMono Nerd Font")
@@ -14,15 +14,32 @@
 #show figure.caption: set text(size: 1.1em)
 #show figure.where(kind: image): set block(width: 80%)
 
-// page setup
+// Einstellungen
+#let double-sided = false // Doppelseitiger Druck -> newpage() startet auf ungerader Seite
+#let show-chapter-on-page-top = false // Kopfzeile über der Seite (Zusatzoption für einseitigen Druck)
+
 #set page(
   paper: "a4",
   number-align: center,
-  numbering: "1",
+  numbering: none,
 )
 
-#show: abbr.show-rule
+#set page(header: context {
+  if show-chapter-on-page-top {
+    align(left, emph(hydra(1, skip-starting: false)))
+    line(length: 100%)
+  }
+})
 
+#let newpage() = {
+  if double-sided {
+    pagebreak(to: "odd", weak: true)
+  } else {
+    pagebreak()
+  }
+}
+
+// Titelseite
 #macros.titlePage(
   fachbereich: "Elektrotechnik/Informatik",
   fachgebiet: "Verteilte Systeme",
@@ -37,33 +54,43 @@
   betreuer: "Christian Coupé, M.Sc.",
 )
 
-#set page(header: context {
-  align(left, emph(hydra(1, skip-starting: false)))
-  line(length: 100%)
-})
 
 // Abkürzungen
 #abbr.make(
   ("HTML", "Hypertext Markup Language"),
 )
 
+// Seitenzahl beginnt bei Abstract (römisch)
+#newpage()
+#set page(numbering: "I")
 #counter(page).update(1)
 
-#pagebreak()
-#heading("Abstract", numbering: "I.")
-
+// Abstract
+= Abstract
 #lorem(100)
 
-#pagebreak()
+// Abkürzungsverzeichnis
+#newpage()
+#show: abbr.show-rule
+#abbr.list(title: "Abkürzungsverzeichnis")
 
+// Inhaltsverzeichnis
+#newpage()
 #outline(depth: 3)
+
+// Seitenzahl merken (für später korrekt weiterführen)
+<last_romanic>
+
+// Seitenzahlen beginnen für Inhalt wieder bei 1 (arabisch)
+#newpage()
 #set heading(numbering: "1.")
+#set page(numbering: "1")
 #counter(heading).update(0)
-#pagebreak()
+#counter(page).update(1)
 
 = Typst
 
-Typst @noauthor_typst_2025 ist eine moderne Alternative zu LaTeX. 
+Typst @noauthor_typst_2025 ist eine moderne Alternative zu LaTeX.
 
 Schreibt sich wie Markdown, mit live Preview, und Scripting im Text.
 
@@ -113,39 +140,38 @@ $ <formel1>
 
 Oder als eigene Linie dargestellt und referenziert werden, wie in @formel1.
 
-// Ende der Arbeit, setze die Überschriften neu und
-#set heading(numbering: "I.")
-#counter(heading).update(1)
-#abbr.list(title: "Abkürzungsverzeichnis")
-#pagebreak()
+// Ende der Arbeit, setze die Überschriften neu und setze die Seitenzahlen wieder auf römisch
+#newpage()
+#set heading(numbering: none)
+#set page(numbering: "I")
+#context [
+  #let last_romanic_page = counter(page).at(<last_romanic>).at(0)
+  #let addition = if double-sided { 2 } else { 1 }
+  #counter(page).update(last_romanic_page + addition)
+]
 
+// Verzeichnisse
 = Abbildungsverzeichnis
-#outline(
-  title: none,
-  target: figure.where(kind: image),
-)
+#outline(title: none, target: figure.where(kind: image))
 
 = Tabellenverzeichnis
-#outline(
-  title: none,
-  target: figure.where(kind: table),
-)
+#outline(title: none, target: figure.where(kind: table))
 
 = Codeverzeichnis
-#outline(
-  title: none,
-  target: figure.where(kind: "code"),
-)
-#pagebreak()
+#outline(title: none, target: figure.where(kind: "code"))
 
 
-= Bibliographie
-#bibliography("references.bib", full: true, style: "ieee", title: none)
+// Literaturverzeichnis
+#newpage()
+#bibliography("references.bib", full: true, style: "ieee", title: "Literaturverzeichnis")
 
 
-
-#pagebreak()
+// Erklärung
+#newpage()
+#counter(page).update(0)
+#set page(numbering: none)
 #set par(spacing: 1.55em, first-line-indent: 0em, justify: true)
+
 #heading("Ehrenwörtliche Erklärung", outlined: false, numbering: none)
 Ich versichere hiermit, dass ich die vorliegende Arbeit selbständig und ohne Benutzung anderer als der
 angegebenen Quellen und Hilfsmittel verfasst habe. Wörtlich übernommene Sätze oder Satzteile sind als
