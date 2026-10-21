@@ -106,6 +106,7 @@ Kapitel sind ganz einfach anzulegen.
 
 Auch hier könnte Text stehen!
 
+#newpage()
 = Es geht nicht nur Text
 
 Neben Text kann man natürlich auch Bilder, Code, Formeln und mehr einfügen.
