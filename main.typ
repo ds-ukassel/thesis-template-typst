@@ -92,15 +92,21 @@
 
 Typst @noauthor_typst_2025 ist eine moderne Alternative zu LaTeX.
 
-Schreibt sich wie Markdown, mit live Preview, und Scripting im Text.
+Es schreibt sich wie Markdown, mit Live-Preview, und Scripting im Text.
 
 == Mit Unterüberschriften
 
 Kapitel sind ganz einfach anzulegen.
 
-#lorem(100)
+=== Und Unterunterüberschriften
 
-== Ein etwas Quellcode
+Auch hier könnte Text stehen!
+
+= Es geht nicht nur Text
+
+Neben Text kann man natürlich auch Bilder, Code, Formeln und mehr einfügen.
+
+== Etwas Quelltext
 
 Code kann mit dem Macro `#macros.codeBlock` erstellt werden.
 
@@ -116,7 +122,7 @@ Zusätzlich kann man @block1 einfach referenzieren.
 
 == Abbildungen
 
-Einfach mit figure ein Bild einfügen.
+Einfach mit `#figure` ein Bild einfügen.
 
 #figure(
   image("assets/cat.jpg"),
@@ -124,11 +130,11 @@ Einfach mit figure ein Bild einfügen.
 )
 
 == Abkürzungen
-@HTML ist eine Abkürzung, sie wird automatisch übernommen.
+@HTML ist eine Abkürzung. Sie wird automatisch übernommen.
 
 == Mathe
 
-Formeln gehen Inline $a^2 + b^2=c^2$
+Formeln können inline $a^2 + b^2=c^2$ genutzt werden...
 $
   f(x) = cases(
     x &"if" x < 0,
@@ -137,8 +143,7 @@ $
   )
 $ <formel1>
 
-
-Oder als eigene Linie dargestellt und referenziert werden, wie in @formel1.
+...oder als eigene Linie dargestellt und referenziert werden, wie in @formel1.
 
 // Ende der Arbeit, setze die Überschriften neu und setze die Seitenzahlen wieder auf römisch
 #newpage()
