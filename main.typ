@@ -64,6 +64,7 @@
 
 
 // Abkürzungen
+#show: abbr.show-rule
 #abbr.make(
   ("HTML", "Hypertext Markup Language"),
 )
@@ -79,7 +80,6 @@
 
 // Abkürzungsverzeichnis
 #newpage()
-#show: abbr.show-rule
 #abbr.list(title: "Abkürzungsverzeichnis")
 
 // Inhaltsverzeichnis
