@@ -90,9 +90,6 @@
 #newpage()
 #outline(depth: 3)
 
-// Seitenzahl merken (für später korrekt weiterführen)
-<last_romanic>
-
 // Seitenzahlen beginnen für Inhalt wieder bei 1 (arabisch)
 #newpage()
 #set heading(numbering: "1.")
@@ -168,11 +165,7 @@ $ <formel1>
 #newpage()
 #set heading(numbering: none)
 #set page(numbering: "I")
-#context [
-  #let last_romanic_page = counter(page).at(<last_romanic>).at(0)
-  #let addition = if double-sided { 2 } else { 1 }
-  #counter(page).update(last_romanic_page + addition)
-]
+#counter(page).update(4) // TODO: Needs to be updated manually
 
 // Verzeichnisse
 #show outline.entry: e => link(
