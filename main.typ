@@ -9,22 +9,23 @@
 #show heading: set block(above: 1.4em, below: 1em)
 #set math.equation(numbering: "1.")
 
-// Überschriften von Figuren und Bildbreite einstellen
+// Headings and Figures
 #set figure.caption(position: bottom)
 #show figure.caption: set text(size: 10pt, weight: "bold")
 #show figure.where(kind: image): set block(width: 80%)
 
-// Einstellungen
+// Config
 #let double-sided = false // Doppelseitiger Druck -> newpage() startet auf ungerader Seite
 #let show-chapter-on-page-top = false // Kopfzeile über der Seite (Zusatzoption für einseitigen Druck)
 
+// Page Setup
 #set page(
   paper: "a4",
   number-align: center,
   numbering: none,
 )
 
-// Titelseite
+// Title Page
 #macros.titlePage(
   fachbereich: "Elektrotechnik/Informatik",
   fachgebiet: "Verteilte Systeme",
@@ -69,20 +70,19 @@
   ("HTML", "Hypertext Markup Language"),
 )
 
-// Seitenzahl beginnt bei Abstract (römisch)
+// Page numbers start at the Abstract with I in roman numbers
 #newpage()
 #set page(numbering: "I")
 #counter(page).update(1)
 
 // Abstract
-= Abstract
-#lorem(100)
+#include "chapters/abstract.typ"
 
-// Abkürzungsverzeichnis
+// Abbreviations
 #newpage()
 #abbr.list(title: "Abkürzungsverzeichnis")
 
-// Inhaltsverzeichnis
+// Table of Contents
 #show outline.entry: set outline.entry(fill: repeat([.], gap: 0.3em))
 #show outline.entry.where(level: 1): set outline.entry(fill: none)
 #show outline.entry.where(level: 1): set text(weight: "bold")
@@ -90,84 +90,25 @@
 #newpage()
 #outline(depth: 3)
 
-// Seitenzahlen beginnen für Inhalt wieder bei 1 (arabisch)
+// Pages for the main content start at 1 in arabic numbers
 #newpage()
 #set heading(numbering: "1.")
 #set page(numbering: "1")
 #counter(heading).update(0)
 #counter(page).update(1)
 
-= Typst
-
-Typst @noauthor_typst_2025 ist eine moderne Alternative zu LaTeX.
-
-Es schreibt sich wie Markdown, mit Live-Preview, und Scripting im Text.
-
-#lorem(200)
-
-== Mit Unterüberschriften
-
-Kapitel sind ganz einfach anzulegen.
-
-#lorem(200)
-
-=== Und Unterunterüberschriften
-
-Auch hier könnte Text stehen!
-
-#lorem(200)
+#include "chapters/intro.typ"
 
 #newpage()
-= Es geht nicht nur Text
+#include "chapters/chapter.typ"
 
-Neben Text kann man natürlich auch Bilder, Code, Formeln und mehr einfügen.
-
-== Etwas Quelltext
-
-Code kann mit dem Macro `#macros.codeBlock` erstellt werden.
-
-#macros.codeBlock(
-  ```py
-  print('Hello World')
-  ```,
-  caption: "Mit Überschrift",
-  subtext: [Und optionalem Kommentar.],
-) <block1>
-
-Zusätzlich kann man @block1 einfach referenzieren.
-
-== Abbildungen
-
-Einfach mit `#figure` ein Bild einfügen.
-
-#figure(
-  image("assets/cat.jpg"),
-  caption: [eine Katze],
-)
-
-== Abkürzungen
-@HTML ist eine Abkürzung. Sie wird automatisch übernommen.
-
-== Mathe
-
-Formeln können inline $a^2 + b^2=c^2$ genutzt werden...
-$
-  f(x) = cases(
-    x &"if" x < 0,
-    1 &"if" x=0,
-    -x &"if" x>0
-  )
-$ <formel1>
-
-...oder als eigene Linie dargestellt und referenziert werden, wie in @formel1.
-
-// Ende der Arbeit, setze die Überschriften neu und setze die Seitenzahlen wieder auf römisch
+// End of main content, reset headings and use roman numbers again
 #newpage()
 #set heading(numbering: none)
 #set page(numbering: "I")
 #counter(page).update(4) // TODO: Needs to be updated manually
 
-// Verzeichnisse
+// Outlines
 #show outline.entry: e => link(
   e.element.location(),
   e.indented([*#e.prefix()*:], e.inner()),
@@ -184,36 +125,14 @@ $ <formel1>
 #outline(title: none, target: figure.where(kind: "code"))
 
 
-// Literaturverzeichnis
+// Bibliography
 #newpage()
 #bibliography("references.bib", full: true, style: "ieee", title: "Literaturverzeichnis")
 
 
-// Erklärung
+// Declaration
 #newpage()
 #counter(page).update(0)
 #set page(numbering: none)
 #set par(spacing: 1.55em, first-line-indent: 0em, justify: true)
-
-#heading("Ehrenwörtliche Erklärung", outlined: false, numbering: none)
-Ich versichere hiermit, dass ich die vorliegende Arbeit selbständig und ohne Benutzung anderer als der
-angegebenen Quellen und Hilfsmittel verfasst habe. Wörtlich übernommene Sätze oder Satzteile sind als
-Zitat belegt, andere Anlehnungen, hinsichtlich Aussage und Umfang, unter Quellenangabe kenntlich
-gemacht.
-
-Die Arbeit hat in gleicher oder ähnlicher Form noch keiner Prüfungsbehörde vorgelegen und ist
-nicht veröffentlicht. Sie wurde nicht, auch nicht auszugsweise, für eine andere Prüfungs- oder
-Studienleistung verwendet
-#v(4em)
-#grid(
-  rows: 1,
-  columns: 2,
-  column-gutter: (0.5fr, 0.5fr),
-  grid.cell(
-    [#line(length: 70%) #v(-1em) Ort, Datum],
-  ),
-  grid.cell(
-    align: right,
-    [#line(length: 70%) #v(-1em) Unterschrift],
-  ),
-)
+#include "chapters/declaration.typ"
