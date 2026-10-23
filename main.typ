@@ -15,8 +15,8 @@
 #show figure.where(kind: image): set block(width: 80%)
 
 // Config
-#let double-sided = false // Doppelseitiger Druck -> newpage() startet auf ungerader Seite
-#let show-chapter-on-page-top = false // Kopfzeile über der Seite (Zusatzoption für einseitigen Druck)
+#let double-sided = false // Duplex print -> newpage() starts on an odd page
+#let show-chapter-on-page-top = false // Add a header showing the chapter above the page (only useful for single sided prints)
 
 // Page Setup
 #set page(
@@ -64,7 +64,7 @@
 }
 
 
-// Abkürzungen
+// Abbreviations Setup
 #show: abbr.show-rule
 #abbr.make(
   ("HTML", "Hypertext Markup Language"),
@@ -78,7 +78,7 @@
 // Abstract
 #include "chapters/abstract.typ"
 
-// Abbreviations
+// List of Abbreviations
 #newpage()
 #abbr.list(title: "Abkürzungsverzeichnis")
 
