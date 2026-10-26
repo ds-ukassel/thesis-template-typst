@@ -2,27 +2,30 @@
 #import "macros.typ"
 #import "@preview/hydra:0.6.2": hydra
 
-// latex style
+// Latex style
 #set par(leading: 0.6em, spacing: 1.1em, first-line-indent: 0em, justify: true)
 #set text(font: "New Computer Modern", lang: "de")
-#show raw: set text(font: "FiraMono Nerd Font")
+#show raw: set text(font: ("FiraMono Nerd Font", "Liberation Mono", "Courier New"))
 #show heading: set block(above: 1.4em, below: 1em)
 #set math.equation(numbering: "1.")
 
-// Überschriften von Figuren und Bildbreite einstellen
-#set figure.caption(position: top)
-#show figure.caption: set text(size: 1.1em)
+// Headings and Figures
+#set figure.caption(position: bottom)
+#show figure.caption: set text(size: 10pt, weight: "bold")
 #show figure.where(kind: image): set block(width: 80%)
 
-// page setup
+// Config
+#let double-sided = false // Duplex print -> newpage() starts on an odd page
+#let show-chapter-on-page-top = false // Add a header showing the chapter above the page (only useful for single sided prints)
+
+// Page Setup
 #set page(
   paper: "a4",
   number-align: center,
-  numbering: "1",
+  numbering: none,
 )
 
-#show: abbr.show-rule
-
+// Title Page
 #macros.titlePage(
   fachbereich: "Elektrotechnik/Informatik",
   fachgebiet: "Verteilte Systeme",
@@ -38,133 +41,97 @@
 )
 
 #set page(header: context {
-  align(left, emph(hydra(1, skip-starting: false)))
-  line(length: 100%)
+  if show-chapter-on-page-top {
+    align(left, emph(hydra(1, skip-starting: false)))
+    line(length: 100%)
+  }
 })
 
-// Abkürzungen
+#set page(
+  margin: if double-sided {
+    (inside: 3cm, outside: 2cm)
+  } else {
+    (x: 2.5cm, y: 2.5cm)
+  }
+)
+
+#let newpage() = {
+  if double-sided {
+    pagebreak(to: "odd", weak: true)
+  } else {
+    pagebreak()
+  }
+}
+
+
+// Abbreviations Setup
+#show: abbr.show-rule
 #abbr.make(
   ("HTML", "Hypertext Markup Language"),
 )
 
+// Page numbers start at the Abstract with I in roman numbers
+#newpage()
+#set page(numbering: "I")
 #counter(page).update(1)
 
-#pagebreak()
-#heading("Abstract", numbering: "I.")
+// Abstract
+#include "chapters/abstract.typ"
 
-#lorem(100)
-
-#pagebreak()
-
-#outline(depth: 3)
-#set heading(numbering: "1.")
-#counter(heading).update(0)
-#pagebreak()
-
-= Typst
-
-Typst @noauthor_typst_2025 ist eine moderne Alternative zu LaTeX. 
-
-Schreibt sich wie Markdown, mit live Preview, und Scripting im Text.
-
-== Mit Unterüberschriften
-
-Kapitel sind ganz einfach anzulegen.
-
-#lorem(100)
-
-== Ein etwas Quellcode
-
-Code kann mit dem Macro `#macros.codeBlock` erstellt werden.
-
-#macros.codeBlock(
-  ```py
-  print('Hello World')
-  ```,
-  caption: "Mit Überschrift",
-  subtext: [Und optionalem Kommentar.],
-) <block1>
-
-Zusätzlich kann man @block1 einfach referenzieren.
-
-== Abbildungen
-
-Einfach mit figure ein Bild einfügen.
-
-#figure(
-  image("assets/cat.jpg"),
-  caption: [eine Katze],
-)
-
-== Abkürzungen
-@HTML ist eine Abkürzung, sie wird automatisch übernommen.
-
-== Mathe
-
-Formeln gehen Inline $a^2 + b^2=c^2$
-$
-  f(x) = cases(
-    x &"if" x < 0,
-    1 &"if" x=0,
-    -x &"if" x>0
-  )
-$ <formel1>
-
-
-Oder als eigene Linie dargestellt und referenziert werden, wie in @formel1.
-
-// Ende der Arbeit, setze die Überschriften neu und
-#set heading(numbering: "I.")
-#counter(heading).update(1)
+// List of Abbreviations
+#newpage()
 #abbr.list(title: "Abkürzungsverzeichnis")
-#pagebreak()
+
+// Table of Contents
+#show outline.entry: set outline.entry(fill: repeat([.], gap: 0.3em))
+#show outline.entry.where(level: 1): set outline.entry(fill: none)
+#show outline.entry.where(level: 1): set text(weight: "bold")
+#show outline.entry.where(level: 1): set block(above: 1em)
+#newpage()
+#outline(depth: 3)
+
+// Pages for the main content start at 1 in arabic numbers
+#newpage()
+#set heading(numbering: "1.")
+#set page(numbering: "1")
+#counter(heading).update(0)
+#counter(page).update(1)
+
+#include "chapters/intro.typ"
+
+#newpage()
+#include "chapters/chapter.typ"
+
+// End of main content, reset headings and use roman numbers again
+#newpage()
+#set heading(numbering: none)
+#set page(numbering: "I")
+#counter(page).update(4) // TODO: Needs to be updated manually
+
+// Outlines
+#show outline.entry: e => link(
+  e.element.location(),
+  e.indented([*#e.prefix()*:], e.inner()),
+)
+#show outline.entry.where(level: 1): set text(weight: "regular")
 
 = Abbildungsverzeichnis
-#outline(
-  title: none,
-  target: figure.where(kind: image),
-)
+#outline(title: none, target: figure.where(kind: image))
 
 = Tabellenverzeichnis
-#outline(
-  title: none,
-  target: figure.where(kind: table),
-)
+#outline(title: none, target: figure.where(kind: table))
 
 = Codeverzeichnis
-#outline(
-  title: none,
-  target: figure.where(kind: "code"),
-)
-#pagebreak()
+#outline(title: none, target: figure.where(kind: "code"))
 
 
-= Bibliographie
-#bibliography("references.bib", full: true, style: "ieee", title: none)
+// Bibliography
+#newpage()
+#bibliography("references.bib", full: true, style: "ieee", title: "Literaturverzeichnis")
 
 
-
-#pagebreak()
-#set par(spacing: 1.55em, first-line-indent: 0em, justify: true)
-#heading("Ehrenwörtliche Erklärung", outlined: false, numbering: none)
-Ich versichere hiermit, dass ich die vorliegende Arbeit selbständig und ohne Benutzung anderer als der
-angegebenen Quellen und Hilfsmittel verfasst habe. Wörtlich übernommene Sätze oder Satzteile sind als
-Zitat belegt, andere Anlehnungen, hinsichtlich Aussage und Umfang, unter Quellenangabe kenntlich
-gemacht.
-
-Die Arbeit hat in gleicher oder ähnlicher Form noch keiner Prüfungsbehörde vorgelegen und ist
-nicht veröffentlicht. Sie wurde nicht, auch nicht auszugsweise, für eine andere Prüfungs- oder
-Studienleistung verwendet
-#v(4em)
-#grid(
-  rows: 1,
-  columns: 2,
-  column-gutter: (0.5fr, 0.5fr),
-  grid.cell(
-    [#line(length: 70%) #v(-1em) Ort, Datum],
-  ),
-  grid.cell(
-    align: right,
-    [#line(length: 70%) #v(-1em) Unterschrift],
-  ),
-)
+// Declaration
+#newpage()
+#counter(page).update(0)
+#set page(numbering: none)
+#include "chapters/declaration.typ"
