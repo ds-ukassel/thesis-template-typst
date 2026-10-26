@@ -134,5 +134,4 @@
 #newpage()
 #counter(page).update(0)
 #set page(numbering: none)
-#set par(spacing: 1.55em, first-line-indent: 0em, justify: true)
 #include "chapters/declaration.typ"
